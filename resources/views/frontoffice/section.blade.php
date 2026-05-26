@@ -2,34 +2,31 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon site</title>
+    <title>{{ $section->seo_title ?? $section->title }}</title>
+    <meta name="description" content="{{ $section->seo_description }}">
 </head>
 <body>
-    <!-- Header avec pub -->
+    <!-- Header pub -->
     <header>
         @foreach($ads->where('location', 'header') as $ad)
             {!! $ad->content !!}
         @endforeach
     </header>
 
-    <!-- Sections -->
+    <!-- Section principale -->
     <main>
-        @foreach($sections as $section)
-            <section>
-                <h2>{{ $section->title }}</h2>
-                <p>{{ $section->content }}</p>
-            </section>
-        @endforeach
+        <h1>{{ $section->title }}</h1>
+        <p>{{ $section->content }}</p>
     </main>
 
-    <!-- Sidebar avec pub -->
+    <!-- Sidebar pub -->
     <aside>
         @foreach($ads->where('location', 'sidebar') as $ad)
             {!! $ad->content !!}
         @endforeach
     </aside>
 
-    <!-- Footer avec pub -->
+    <!-- Footer pub -->
     <footer>
         @foreach($ads->where('location', 'footer') as $ad)
             {!! $ad->content !!}

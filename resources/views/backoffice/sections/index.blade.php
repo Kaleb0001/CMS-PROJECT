@@ -40,8 +40,12 @@ function toggleSection(id) {
 function moveSection(id, direction) {
   fetch(`/admin/sections/${id}/move`, {
     method: 'POST',
-    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-    body: JSON.stringify({ direction })
+    headers: {
+      'X-CSRF-TOKEN': '{{ csrf_token() }}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ direction: direction })
   }).then(() => location.reload());
 }
+
 </script>
