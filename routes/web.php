@@ -2,11 +2,28 @@
 
 use App\Http\Controllers\BackOffice\AdController;
 use App\Http\Controllers\BackOffice\SectionController;
+use App\Models\Ad;
+use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/home', function () {
+    $sections = Section::where('is_visible', true)->orderBy('position')->get();
+    $ads = Ad::where('is_active', true)->get();
+    return view('frontoffice.home', compact('sections', 'ads'));
+});
+
+
+Route::get('/section/{slug}', function ($slug) {
+    $section = Section::where('slug', $slug)->firstOrFail();
+    $ads = Ad::where('is_active', true)->get();
+    return view('frontoffice.section', compact('section', 'ads'));
+});
+
 
 
 Route::prefix('admin')->group(function () {

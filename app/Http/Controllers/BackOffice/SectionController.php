@@ -76,16 +76,66 @@ class SectionController extends Controller
 
 
 
-    public function move($id, Request $request) {
+    /* public function move($id, Request $request) {
+        dd($id, $request->all());
         $section = Section::findOrFail($id);
         $direction = $request->input('direction');
+        dd($section, $direction);
 
         if ($direction === 'up') $section->position--;
         if ($direction === 'down') $section->position++;
         $section->save();
 
         return back();
+    } */
+
+
+    public function move($id, Request $request) {
+        $section = Section::findOrFail($id);
+        $direction = $request->input('direction');
+
+        if ($direction === 'up') {
+            // Trouver la section juste au-dessus
+            $above = Section::where('position', '<', $section->position)
+                            ->orderBy('position', 'desc')
+                            ->first();
+            if ($above) {
+                // Échanger les positions
+                $temp = $section->position;
+                $section->position = $above->position;
+                $above->position = $temp;
+                $section->save();
+                $above->save();
+            }
+            else {
+                $section->position--;
+                $section->save();
+            }
+        }
+
+        if ($direction === 'down') {
+            // Trouver la section juste en dessous
+            $below = Section::where('position', '>', $section->position)
+                            ->orderBy('position', 'asc')
+                            ->first();
+            if ($below) {
+                // Échanger les positions
+                $temp = $section->position;
+                $section->position = $below->position;
+                $below->position = $temp;
+                $section->save();
+                $below->save();
+            }
+            else {
+                $section->position++;
+                $section->save();
+            }
+
+        }
+
+        return back();
     }
+
 
 
 }
